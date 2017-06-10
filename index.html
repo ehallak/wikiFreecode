@@ -1,0 +1,42 @@
+<html>
+<head>
+<style>
+#back{
+	background-color : #e6b3cc;
+}
+</style>
+</head>
+  <body id = back>
+    <input type = 'text' name ='search' placeholder = 'Search..' id = 'searchBox'/>
+	<button id = 'button'>Search</button>
+	<div id = 'searchResults'></div>
+  </body>
+  
+  <script src = 'https://code.jquery.com/jquery-3.2.1.min.js'>
+  </script>
+  <script type="text/javascript">
+  function searchOnClick(){
+	if (document.getElementById('searchBox').value != ''){
+		$.ajax({
+		  url: 'https://en.wikipedia.org/w/api.php',
+		  data: { action: 'query', list: 'search', srsearch: document.getElementById('searchBox').value, format: 'json' },
+		  dataType: 'jsonp',
+		  success: function (x) {
+		  $('#searchResults').text(''); 
+			for (i = 0; i < 10; i++){
+				$('#searchResults').append('<div>title ' + '<a href="https://en.wikipedia.org/wiki/'+ x.query.search[i].title +'" target="_blank">' + x.query.search[i].title + '</a>' + '<br/>' + x.query.search[i].snippet + '<br/></div>');
+			}
+		  }
+		});
+    } else $('#searchResults').text('Try again');
+
+  } 
+  $('#button').click(searchOnClick);
+  $("#searchBox").keydown(function(event){
+    if(event.keyCode == 13){
+        searchOnClick();
+    }
+});
+  
+  </script>
+</html>
